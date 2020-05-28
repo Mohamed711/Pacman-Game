@@ -4,75 +4,44 @@
 #include <random>
 #include <iostream>
 
+Enemy::Enemy(int grid_width, int grid_height)
+      : GameObject(grid_width, grid_height)
+{
+  // Initialize the default direction to be random
+  UpdateDirection();
+
+  // Random location at the X but at the top of the game
+  head_x = rand() % grid_width;
+  head_y = 0;
+}
+
 void Enemy::Update()
 {    
-  // Update the direction of the enemy each one second
-  if (updates >= 100)
-  {
-    int dir_index = rand() % 4;
-    
-    switch (dir_index)
-    {
-        case 0: 
-            direction = Direction::kUp;
-            break;
-
-        case 1: 
-            direction = Direction::kDown;
-            break;
-
-        case 2: 
-            direction = Direction::kLeft;
-            break;
-
-        case 3: 
-            direction = Direction::kRight;
-            break;
-    }
-
-    updates = 0;
-  }
-
-  updates++;
+  UpdateDirection();
   UpdatePostion();
 }
 
-// Update the position of the enemy
-void Enemy::UpdatePostion() 
+// Change the direction of the enemy randomly
+void Enemy::UpdateDirection()
 {
-  switch (direction) 
+  int dir_index = rand() % 4;
+    
+  switch (dir_index)
   {
-    case Direction::kUp:
-      this->head_y -= speed;
-      break;
+      case 0: 
+          direction = Direction::kUp;
+          break;
 
-    case Direction::kDown:
-      this->head_y += speed;
-      break;
+      case 1: 
+          direction = Direction::kDown;
+          break;
 
-    case Direction::kLeft:
-      this->head_x -= speed;
-      break;
+      case 2: 
+          direction = Direction::kLeft;
+          break;
 
-    case Direction::kRight:
-      this->head_x += speed;
-      break;
+      case 3: 
+          direction = Direction::kRight;
+          break;
   }
-
-  // Wrap enemy around to the beginning if going off of the screen.
-  head_x = fmod(head_x + grid_width, grid_width);
-  head_y = fmod(head_y + grid_height, grid_height);
-
-  // std::cout << head_x << " " << head_y << " " << std::endl;
-}
-
-// Check if the cell is occupied by enemy
-bool Enemy::EnemyCell(int x, int y) 
-{
-  if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) 
-  {
-    return true;
-  }
-
-  return false;
 }

@@ -2,44 +2,13 @@
 #include <cmath>
 #include <iostream>
 
-void Pacman::Update() 
+Pacman::Pacman(int grid_width, int grid_height)
+    : GameObject(grid_width, grid_height)
 {
-  UpdatePostion();
-}
+  // Initialize the direction of pacman
+  direction = Direction::kUp;
 
-void Pacman::UpdatePostion() 
-{
-  switch (direction) 
-  {
-    case Direction::kUp:
-      head_y -= speed;
-      break;
-
-    case Direction::kDown:
-      head_y += speed;
-      break;
-
-    case Direction::kLeft:
-      head_x -= speed;
-      break;
-
-    case Direction::kRight:
-      head_x += speed;
-      break;
-  }
-
-  // Wrap Pacman around to the beginning if going off of the screen.
-  head_x = fmod(head_x + grid_width, grid_width);
-  head_y = fmod(head_y + grid_height, grid_height);
-}
-
-// Check if the cell is occupied by Pacman
-bool Pacman::PacmanCell(int x, int y) 
-{
-  if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) 
-  {
-    return true;
-  }
-
-  return false;
+  // Initialize the first location of pacman (lower-center)
+  head_x = grid_width / 2;
+  head_y = grid_height;
 }
