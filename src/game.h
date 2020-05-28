@@ -11,7 +11,7 @@ class Game {
  public:
   Game(const std::size_t screen_width, const std::size_t screen_height, 
              std::size_t grid_width, std::size_t grid_height);
-  void Run(Controller const &controller, Renderer &renderer,
+  bool Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;

@@ -16,7 +16,7 @@ Game::Game(const std::size_t screen_width, const std::size_t screen_height,
   PlaceFood();
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer,
+bool Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -24,6 +24,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
+  bool win_state = false;
 
   while (running) {
     frame_start = SDL_GetTicks();
@@ -54,14 +55,20 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
   }
+
+  win_state = (food.empty()) ? true : false;
+
+  return win_state;
 }
 
-void Game::PlaceFood() {
+// Initial Grid of food for the PACMAN
+void Game::PlaceFood() 
+{
   SDL_Point fooditem;
 
-  for (int i = 0; i < _grid_width; i = i + 1)
+  for (int i = 0; i < _grid_width; i++)
   {
-    for (int j = 0; j < _grid_width; j = j + 1)
+    for (int j = 0; j < _grid_width; j++)
     {
       fooditem.x = i;
       fooditem.y = j;
@@ -70,21 +77,33 @@ void Game::PlaceFood() {
   }
 }
 
-void Game::Update() {
-  if (!pacman.alive) return;
+void Game::Update() 
+{
+  // Check if pacman died or win the game
+  if ((!pacman.alive) || food.empty()) return;
 
   pacman.Update();
 
   int new_x = static_cast<int>(pacman.head_x);
   int new_y = static_cast<int>(pacman.head_y);
+  
+  std::vector<SDL_Point>::iterator fooditem;
 
   // Check if there's food over here
- // if (food.x == new_x && food.y == new_y) {
-    score++;
-    // Grow pacman and increase speed.
-    //pacman.GrowBody();
-    //pacman.speed += 0.02;
-  //}
+  for (fooditem = food.begin(); fooditem != food.end(); fooditem++)
+  {
+    if ((*fooditem).x == new_x && (*fooditem).y == new_y) 
+    {
+      // increase the score
+      score++;
+
+      // remove food from its place
+      food.erase(fooditem);
+
+      break;
+    }
+  }
+
 }
 
 int Game::GetScore() const { return score; }
