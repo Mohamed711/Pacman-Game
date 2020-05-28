@@ -3,27 +3,30 @@
 #include "SDL.h"
 
 Game::Game(const std::size_t screen_width, const std::size_t screen_height, 
-                 std::size_t grid_width, std::size_t grid_height)
+                 std::size_t grid_width, std::size_t grid_height, std::size_t enemies_no)
     : pacman(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
-
+      random_h(0, static_cast<int>(grid_height)) 
+{
   _screen_width = screen_width;
   _screen_height = screen_height;
   _grid_width = grid_width;
   _grid_height = grid_height;
+  _enemies_no = enemies_no;
+
   PlaceFood();
 
   // Add enemies to the game
-  for (int enemy_no = 0; enemy_no < 5; enemy_no++)
+  for (int enemy_no = 0; enemy_no < _enemies_no; enemy_no++)
   {
     enemies.push_back(Enemy(grid_width, grid_height));
   }
 }
 
 bool Game::Run(Controller const &controller, Renderer &renderer,
-               std::size_t target_frame_duration) {
+               std::size_t target_frame_duration) 
+{
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
   Uint32 frame_end;
@@ -32,7 +35,14 @@ bool Game::Run(Controller const &controller, Renderer &renderer,
   bool running = true;
   bool win_state = false;
 
-  while (running) {
+  // start running of the enemy threads
+  for (int enemy_no = 0; enemy_no < _enemies_no; enemy_no++)
+  {
+    //threads.emplace_back(std::thread(&Enemy::Update, enemies[enemy_no]));
+  }
+
+  while (running)
+  {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
@@ -90,19 +100,19 @@ void Game::Update()
 
   pacman.Update();
 
-
   for (int i = 0; i < 5; i++)
   {
     enemies[i].Update();
   }
 
-  int new_x = static_cast<int>(pacman.head_x);
-  int new_y = static_cast<int>(pacman.head_y);
+  SDL_Point pacman_loc = pacman.getLocation();
+  int new_x = pacman_loc.x;
+  int new_y = pacman_loc.y;
 
   std::vector<Enemy>::iterator enemy;
   for (enemy = enemies.begin(); enemy != enemies.end(); enemy++)
   {
-    if (static_cast<int>((*enemy).head_x) == new_x && static_cast<int>((*enemy).head_y) == new_y) 
+    if ((*enemy).GameObjectCell(new_x, new_y)) 
     {
       pacman.alive = false;
       break;

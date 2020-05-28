@@ -7,6 +7,8 @@
 Enemy::Enemy(int grid_width, int grid_height)
       : GameObject(grid_width, grid_height)
 {
+  ChangeDirectionSec = 0;
+
   // Initialize the default direction to be random
   UpdateDirection();
 
@@ -16,8 +18,17 @@ Enemy::Enemy(int grid_width, int grid_height)
 }
 
 void Enemy::Update()
-{    
-  UpdateDirection();
+{
+  //std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  ChangeDirectionSec++;
+
+  // Change direction each two seconds
+  if (ChangeDirectionSec >= 200)
+  {
+    UpdateDirection();
+    ChangeDirectionSec = 0;
+  }
+
   UpdatePostion();
 }
 

@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include <vector>
+#include <mutex>
 #include "SDL.h"
 
 class GameObject 
@@ -16,18 +17,16 @@ class GameObject
         head_y(grid_height / 2) {}
 
   virtual void Update();
-
   bool GameObjectCell(int x, int y);
+  SDL_Point getLocation();
 
   Direction direction;
-
   float speed{0.1f};
   float head_x;
   float head_y;
 
  protected:
   void UpdatePostion();
-
   int grid_width;
   int grid_height;
 };

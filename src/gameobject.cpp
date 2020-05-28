@@ -10,6 +10,8 @@ void GameObject::Update()
 // Update the object position based on the direction
 void GameObject::UpdatePostion() 
 {
+  //std::lock_guard<std::mutex> uLock(_mutex); // protect the location member variables
+
   switch (direction) 
   {
     case Direction::kUp:
@@ -37,10 +39,24 @@ void GameObject::UpdatePostion()
 // Check if the cell is occupied by GameObject or not
 bool GameObject::GameObjectCell(int x, int y) 
 {
-  if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) 
+  SDL_Point loc = getLocation();
+  if (x == loc.x && y == loc.y) 
   {
     return true;
   }
 
   return false;
+}
+
+// Funtion called to get the location of object - called from another thread context
+SDL_Point GameObject::getLocation()
+{
+  SDL_Point loc;
+
+  //std::lock_guard<std::mutex> uLock(_mutex); // protect the location member variables
+
+  loc.x = static_cast<int>(head_x);
+  loc.y = static_cast<int>(head_y);
+
+  return loc;
 }

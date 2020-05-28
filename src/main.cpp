@@ -10,12 +10,13 @@ int main() {
   constexpr std::size_t kScreenHeight{640};
   constexpr std::size_t kGridWidth{16};
   constexpr std::size_t kGridHeight{16};
+  constexpr std::size_t kNoOfEnemies{5};
 
   bool win_state = false;
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+  Game game(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight, kNoOfEnemies);
   win_state = game.Run(controller, renderer, kMsPerFrame);
 
   if (win_state == false)

@@ -9,11 +9,7 @@ class Pacman : public GameObject
 {
  public:
   Pacman(int grid_width, int grid_height);
-  
   bool alive{true};
-
- private:
-
 };
 
 #endif

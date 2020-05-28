@@ -14,7 +14,7 @@ class Enemy : public GameObject
 
  private:
   void UpdateDirection();
-  int updates;
+  int ChangeDirectionSec; // no of seconds to change the direction randomly
 };
 
 #endif
