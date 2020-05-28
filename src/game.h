@@ -6,6 +6,7 @@
 #include "controller.h"
 #include "renderer.h"
 #include "pacman.h"
+#include "enemy.h"
 
 class Game {
  public:
@@ -23,6 +24,7 @@ class Game {
   std::size_t _screen_height;
 
   Pacman pacman;
+  std::vector<Enemy> enemies;
   std::vector<SDL_Point> food;
 
   std::random_device dev;

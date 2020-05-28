@@ -40,7 +40,8 @@ Renderer::~Renderer()
   SDL_Quit();
 }
 
-void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food) 
+void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food,
+              std::vector<Enemy> const &enemies) 
 {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -62,6 +63,18 @@ void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food)
     food.x = fooditem.x * block.w + (block.w / 2);
     food.y = fooditem.y * block.h + (block.h / 2);
     SDL_RenderFillRect(sdl_renderer, &food);
+  }
+
+  for (auto enemy : enemies)
+  {
+    SDL_Rect enemy_block;
+    // std::cout << "enemy entered " << static_cast<int>(enemy.head_x)  << std::endl;
+    enemy_block.w = screen_width / grid_width;
+    enemy_block.h = screen_height / grid_height;
+    enemy_block.x = static_cast<int>(enemy.head_x) * block.w;
+    enemy_block.y = static_cast<int>(enemy.head_y) * block.h;
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &enemy_block);
   }
 
   // Render pacman head

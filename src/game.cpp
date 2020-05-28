@@ -14,6 +14,12 @@ Game::Game(const std::size_t screen_width, const std::size_t screen_height,
   _grid_width = grid_width;
   _grid_height = grid_height;
   PlaceFood();
+
+  // Add enemies to the game
+  for (int enemy_no = 0; enemy_no < 5; enemy_no++)
+  {
+    enemies.push_back(Enemy(grid_width, grid_height));
+  }
 }
 
 bool Game::Run(Controller const &controller, Renderer &renderer,
@@ -32,7 +38,7 @@ bool Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, pacman);
     Update();
-    renderer.Render(pacman, food);
+    renderer.Render(pacman, food, enemies);
 
     frame_end = SDL_GetTicks();
 
@@ -86,6 +92,15 @@ void Game::Update()
 
   pacman.Update();
 
+  //enemies[2].head_x = 20;
+
+  for (int i = 0; i < 5; i++)
+  {
+    enemies[i].Update();
+  }
+
+  //std::cout << enemies[2].head_x << std::endl;
+
   int new_x = static_cast<int>(pacman.head_x);
   int new_y = static_cast<int>(pacman.head_y);
   
@@ -105,7 +120,6 @@ void Game::Update()
       break;
     }
   }
-
 }
 
 int Game::GetScore() const { return score; }
