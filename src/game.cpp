@@ -86,24 +86,29 @@ void Game::PlaceFood()
 void Game::Update() 
 {
   // Check if pacman died or win the game
-  // if ((!pacman.alive) || food.empty()) return;
-
-  if (food.empty()) return;
+  if ((!pacman.alive) || food.empty()) return;
 
   pacman.Update();
 
-  //enemies[2].head_x = 20;
 
   for (int i = 0; i < 5; i++)
   {
     enemies[i].Update();
   }
 
-  //std::cout << enemies[2].head_x << std::endl;
-
   int new_x = static_cast<int>(pacman.head_x);
   int new_y = static_cast<int>(pacman.head_y);
-  
+
+  std::vector<Enemy>::iterator enemy;
+  for (enemy = enemies.begin(); enemy != enemies.end(); enemy++)
+  {
+    if (static_cast<int>((*enemy).head_x) == new_x && static_cast<int>((*enemy).head_y) == new_y) 
+    {
+      pacman.alive = false;
+      break;
+    }
+  }
+ 
   std::vector<SDL_Point>::iterator fooditem;
 
   // Check if there's food over here
