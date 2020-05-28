@@ -26,8 +26,8 @@ class Game {
   std::size_t _enemies_no;
 
   Pacman pacman;
-  //std::vector<std::thread> threads; 
-  std::vector<Enemy> enemies; 
+  // std::vector<std::thread> threads; 
+  std::vector<std::unique_ptr<Enemy>> enemies; 
   std::vector<SDL_Point> food;
 
   std::random_device dev;

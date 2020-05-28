@@ -13,7 +13,7 @@ class Renderer {
   ~Renderer();
 
   void Render(Pacman const pacman, std::vector<SDL_Point> const &food, 
-              std::vector<Enemy> const &enemies);
+              std::vector<std::unique_ptr<Enemy>> &enemies);
   void UpdateWindowTitle(int score, int fps);
 
  private:

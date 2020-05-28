@@ -5,13 +5,14 @@ add_definitions(-std=c++17)
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
-project(SDL2Test)
+project(Pacman)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" "/usr/lib/")
 
+find_package (Threads)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
 add_executable(PacmanGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/pacman.cpp src/enemy.cpp src/gameobject.cpp)
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
-target_link_libraries(PacmanGame ${SDL2_LIBRARIES})
+target_link_libraries(PacmanGame ${SDL2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

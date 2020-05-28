@@ -40,8 +40,8 @@ Renderer::~Renderer()
   SDL_Quit();
 }
 
-void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food,
-              std::vector<Enemy> const &enemies) 
+void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food, 
+              std::vector<std::unique_ptr<Enemy>> &enemies)
 {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -65,10 +65,10 @@ void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food,
     SDL_RenderFillRect(sdl_renderer, &food);
   }
 
-  for (auto enemy : enemies)
+  for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++)
   {
     SDL_Rect enemy_block;
-    SDL_Point enemy_loc = enemy.getLocation();
+    SDL_Point enemy_loc = (*enemy)->getLocation();
 
     // std::cout << "enemy entered " << static_cast<int>(enemy.head_x)  << std::endl;
     enemy_block.w = screen_width / grid_width;

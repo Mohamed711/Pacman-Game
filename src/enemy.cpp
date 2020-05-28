@@ -15,21 +15,51 @@ Enemy::Enemy(int grid_width, int grid_height)
   // Random location at the X but at the top of the game
   head_x = rand() % grid_width;
   head_y = 0;
+
+  speed = 0.05f;
+}
+
+// this to stop the running of the enemies
+void Enemy::Stop()
+{
+  // this is not needed as racing will not affect running variable 
+  // BUT protection of shared variables is recommended
+  std::unique_lock<std::mutex> lck(_mtx); 
+  running = false;
 }
 
 void Enemy::Update()
 {
-  //std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  ChangeDirectionSec++;
-
-  // Change direction each two seconds
-  if (ChangeDirectionSec >= 200)
+  while (true)
   {
-    UpdateDirection();
-    ChangeDirectionSec = 0;
-  }
+    std::unique_lock<std::mutex> lck(_mtx); 
 
-  UpdatePostion();
+    if (running == false)
+    {
+      lck.unlock();
+      break;
+    }
+
+    lck.unlock();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    
+    ChangeDirectionSec++;
+
+    // Change direction each two seconds
+    if (ChangeDirectionSec >= 200)
+    {
+      UpdateDirection();
+      ChangeDirectionSec = 0;
+    }
+
+    UpdatePostion();
+  }
+}
+
+void Enemy::simulate()
+{
+  enemy_thread = std::thread(&Enemy::Update, this);
 }
 
 // Change the direction of the enemy randomly

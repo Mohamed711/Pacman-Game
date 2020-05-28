@@ -16,12 +16,6 @@ Game::Game(const std::size_t screen_width, const std::size_t screen_height,
   _enemies_no = enemies_no;
 
   PlaceFood();
-
-  // Add enemies to the game
-  for (int enemy_no = 0; enemy_no < _enemies_no; enemy_no++)
-  {
-    enemies.push_back(Enemy(grid_width, grid_height));
-  }
 }
 
 bool Game::Run(Controller const &controller, Renderer &renderer,
@@ -35,10 +29,16 @@ bool Game::Run(Controller const &controller, Renderer &renderer,
   bool running = true;
   bool win_state = false;
 
-  // start running of the enemy threads
+  // Add enemies to the game
   for (int enemy_no = 0; enemy_no < _enemies_no; enemy_no++)
   {
-    //threads.emplace_back(std::thread(&Enemy::Update, enemies[enemy_no]));
+    enemies.emplace_back(std::make_unique<Enemy>(_grid_width, _grid_height));
+  }
+
+  // Simulate the enemies to move
+  for (auto enemy = enemies.begin(); enemy!=enemies.end(); enemy++)
+  {
+    (*enemy)->simulate();
   }
 
   while (running)
@@ -96,23 +96,25 @@ void Game::PlaceFood()
 void Game::Update() 
 {
   // Check if pacman died or win the game
-  if ((!pacman.alive) || food.empty()) return;
+  if ((!pacman.alive) || food.empty()) 
+  {
+    // Stop all enemies
+    for (auto enemy = enemies.begin(); enemy!=enemies.end(); enemy++)
+    {
+      (*enemy)->Stop();
+    }
+    return;
+  }
 
   pacman.Update();
-
-  for (int i = 0; i < 5; i++)
-  {
-    enemies[i].Update();
-  }
 
   SDL_Point pacman_loc = pacman.getLocation();
   int new_x = pacman_loc.x;
   int new_y = pacman_loc.y;
 
-  std::vector<Enemy>::iterator enemy;
-  for (enemy = enemies.begin(); enemy != enemies.end(); enemy++)
+  for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++)
   {
-    if ((*enemy).GameObjectCell(new_x, new_y)) 
+    if ((*enemy)->GameObjectCell(new_x, new_y)) 
     {
       pacman.alive = false;
       break;
