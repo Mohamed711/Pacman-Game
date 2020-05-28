@@ -4,12 +4,6 @@
 #include "pacman.h"
 #include "enemy.h"
 
-void Controller::ChangeDirection(Pacman &pacman, Pacman::Direction input,
-                                 Pacman::Direction opposite) const {
-  if (pacman.direction != opposite || pacman.size == 1) pacman.direction = input;
-  return;
-}
-
 void Controller::HandleInput(bool &running, Pacman &pacman) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
@@ -18,23 +12,19 @@ void Controller::HandleInput(bool &running, Pacman &pacman) const {
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
         case SDLK_UP:
-          ChangeDirection(pacman, Pacman::Direction::kUp,
-                          Pacman::Direction::kDown);
+          pacman.direction = Pacman::Direction::kUp;
           break;
 
         case SDLK_DOWN:
-          ChangeDirection(pacman, Pacman::Direction::kDown,
-                          Pacman::Direction::kUp);
+          pacman.direction = Pacman::Direction::kDown;
           break;
 
         case SDLK_LEFT:
-          ChangeDirection(pacman, Pacman::Direction::kLeft,
-                          Pacman::Direction::kRight);
+          pacman.direction = Pacman::Direction::kLeft;
           break;
 
         case SDLK_RIGHT:
-          ChangeDirection(pacman, Pacman::Direction::kRight,
-                          Pacman::Direction::kLeft);
+          pacman.direction = Pacman::Direction::kRight;
           break;
       }
     }

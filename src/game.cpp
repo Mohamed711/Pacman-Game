@@ -80,7 +80,9 @@ void Game::PlaceFood()
 void Game::Update() 
 {
   // Check if pacman died or win the game
-  if ((!pacman.alive) || food.empty()) return;
+  // if ((!pacman.alive) || food.empty()) return;
+
+  if (food.empty()) return;
 
   pacman.Update();
 

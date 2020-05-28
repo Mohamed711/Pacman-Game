@@ -8,8 +8,7 @@ class Controller {
   void HandleInput(bool &running, Pacman &pacman) const;
 
  private:
-  void ChangeDirection(Pacman &pacman, Pacman::Direction input,
-                       Pacman::Direction opposite) const;
+
 };
 
 #endif

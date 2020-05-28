@@ -27,8 +27,6 @@ int main() {
     std::cout << "Congratualtions!! (YOU WON THE GAME) \n";
   }
 
-  
-
   std::cout << "Score: " << game.GetScore() << "\n";
   return 0;
 }
