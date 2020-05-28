@@ -38,20 +38,28 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Pacman const pacman, SDL_Point const &food) {
+void Renderer::Render(Pacman const pacman, std::vector<SDL_Point> const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
+  static int trial = 0;
 
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
 
   // Render food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
-  block.x = food.x * block.w;
-  block.y = food.y * block.h;
-  SDL_RenderFillRect(sdl_renderer, &block);
+  for (auto fooditem : food)
+  {      
+    SDL_Rect food;
+    food.w = block.w * 0.2;
+    food.h = block.h * 0.2;
+
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
+    food.x = fooditem.x * block.w + (block.w / 2);
+    food.y = fooditem.y * block.h + (block.h / 2);
+    SDL_RenderFillRect(sdl_renderer, &food);
+  }
 
   // Render pacman body
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);

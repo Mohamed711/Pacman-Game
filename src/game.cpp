@@ -2,11 +2,17 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
+Game::Game(const std::size_t screen_width, const std::size_t screen_height, 
+                 std::size_t grid_width, std::size_t grid_height)
     : pacman(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width)),
       random_h(0, static_cast<int>(grid_height)) {
+
+  _screen_width = screen_width;
+  _screen_height = screen_height;
+  _grid_width = grid_width;
+  _grid_height = grid_height;
   PlaceFood();
 }
 
@@ -51,16 +57,15 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::PlaceFood() {
-  int x, y;
-  while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
-    // Check that the location is not occupied by a pacman item before placing
-    // food.
-    if (!pacman.PacmanCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      return;
+  SDL_Point fooditem;
+
+  for (int i = 0; i < _grid_width; i = i + 1)
+  {
+    for (int j = 0; j < _grid_width; j = j + 1)
+    {
+      fooditem.x = i;
+      fooditem.y = j;
+      food.push_back(fooditem);
     }
   }
 }
@@ -74,14 +79,12 @@ void Game::Update() {
   int new_y = static_cast<int>(pacman.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
+ // if (food.x == new_x && food.y == new_y) {
     score++;
-    PlaceFood();
     // Grow pacman and increase speed.
-    pacman.GrowBody();
-    pacman.speed += 0.02;
-  }
+    //pacman.GrowBody();
+    //pacman.speed += 0.02;
+  //}
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return pacman.size; }

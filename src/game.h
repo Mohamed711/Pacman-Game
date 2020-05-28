@@ -9,15 +9,21 @@
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
+  Game(const std::size_t screen_width, const std::size_t screen_height, 
+             std::size_t grid_width, std::size_t grid_height);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
 
  private:
+  std::size_t _grid_width;
+  std::size_t _grid_height;
+  std::size_t _screen_width;
+  std::size_t _screen_height;
+
   Pacman pacman;
-  SDL_Point food;
+  std::vector<SDL_Point> food;
 
   std::random_device dev;
   std::mt19937 engine;
