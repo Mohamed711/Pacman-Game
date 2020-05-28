@@ -1,14 +1,14 @@
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef PACMAN_H
+#define PACMAN_H
 
 #include <vector>
 #include "SDL.h"
 
-class Snake {
+class Pacman {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
 
-  Snake(int grid_width, int grid_height)
+  Pacman(int grid_width, int grid_height)
       : grid_width(grid_width),
         grid_height(grid_height),
         head_x(grid_width / 2),
@@ -17,7 +17,7 @@ class Snake {
   void Update();
 
   void GrowBody();
-  bool SnakeCell(int x, int y);
+  bool PacmanCell(int x, int y);
 
   Direction direction = Direction::kUp;
 
