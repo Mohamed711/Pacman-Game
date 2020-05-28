@@ -1,6 +1,8 @@
 # CPPND: Capstone Pacman Game Project
 
-This project is about 
+This project is a simple Pacman game without obstacles. Pacman is represented in yellow square, the enemies are represented in red squares 
+while the food is small white squares forming a grid on the game screen.
+To succeed the game you need to eat all the food. If pacman touches one of the enemies pacman loses and the game is suspended !
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
@@ -48,6 +50,16 @@ This project is about
 
 * Object Oriented Programming
 	* The project uses Object Oriented Programming techniques: The project is constructed of different classes, each has its own responsinility.
-	* Classes use appropriate access specifiers for class member
-	* Class constructors utilize member initialization lists.
-	* Classes follow an appropriate inheritance hierarchy.
+	* Classes use appropriate access specifiers for class member (gameobject.h), (enemy.h).
+	* Class constructors utilize member initialization lists.  (renderrer.cpp Line:5) (pacman.cpp Line 5),  (enemy.cpp Line 7)
+	* Classes follow an appropriate inheritance hierarchy. (class pacman and class enemy inherit from class gameobject)
+	* Derived class functions override virtual base class functions. (class enemy overrides function Update from gameobject class)
+	
+* Memory Management
+	* The project makes use of references in function declarations. (rednerrer.h line 15,  game.h Line 16, controller.h Line 8)
+	* The project uses destructors appropriately. (file enemy.h, Line 17)
+	* The project uses smart pointers instead of raw pointers.(game.h Line 30, game.cpp Line 35)
+	
+* Concurrency
+	* The project uses multithreading (Enemy.cpp, Line 60 & Enemy.h, Line 24)
+	* A mutex or lock is used in the project. (Enemy.cpp line 35)
